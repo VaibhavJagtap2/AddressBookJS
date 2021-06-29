@@ -4,7 +4,7 @@ const ADDRESS_REGEX_PATTERN = /^[a-zA-z]{3,}$/;
 const PINCODE_REGEX_PATTERN = /^[0-9]{6}$/;
 const PHONE_NUMBER_PATTERN = /^[9][1][6-9]{1}[0-9]{9}$/; 
 const EMAIL_REGEX_PATTERN = /^[a-zA-Z0-9]+([._+-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+.[a-zA-Z]{2,4}([.][a-zA-Z]{2,4})?$/;
-let contactArray = new Array();
+let contactArray = [ ];
 
 class Contact {
 
@@ -144,9 +144,20 @@ let deletContact=()=>{
     }
 }
 
+function searchByCityOrState(searchCityOrState, choice){
+    let contacts = new Array();
+    if(choice == 1){
+        contacts = contactArray.filter(contact => contact.city === searchCityOrState)
+    }
+    if(choice == 2){
+        contacts = contactArray.filter(contact => contact.state === searchCityOrState)
+    }
+    console.log("Contact: ",contacts);
+}
+
 let choice = 0;
 do{
-    console.log("Press: \n1) Add Contact \n2) Edit Contact \n3) View Contact  \n4) Delete Contact \n5) Count Contacts \n0)Exit:");
+    console.log("Press: \n1) Add Contact \n2) Edit Contact \n3) View Contact  \n4) Delete Contact \n5) Count Contacts \n6) Search City or State \n0)Exit:");
     choice = Number(prompt("Enter your choice: "));
     if(choice == 1){
         addContact();
@@ -167,5 +178,29 @@ do{
     }
     if(choice == 5){
         console.log("Number of Contacts: "+contactArray.reduce(contact=>contact + 1, 0));
+    }
+    if(choice == 6){
+        console.log("1) Search By City  2) Search By State");
+        let ch = Number(prompt("Enter your choice: "));
+        switch (ch){
+            case 1: let city = prompt("Enter the city name: ");
+                    searchByCityOrState(city, 1);
+                    break;
+            case 2: let state = prompt("Enter the state name: ");
+                    searchByCityOrState(state, 2);
+                    break;
+        }
+    }
+    if(choice == 7){
+        console.log("1) View By City  2) View By State");
+        let ch = Number(prompt("Enter your choice: "));
+        switch (ch){
+            case 1: let city = prompt("Enter the city name: ");
+                    searchByCityOrState(city, 1);
+                    break;
+            case 2: let state = prompt("Enter the state name: ");
+                    searchByCityOrState(state, 2);
+                    break;
+        }
     }
 }while(choice != 0);
