@@ -4,7 +4,7 @@ const ADDRESS_REGEX_PATTERN = /^[a-zA-z]{3,}$/;
 const PINCODE_REGEX_PATTERN = /^[0-9]{6}$/;
 const PHONE_NUMBER_PATTERN = /^[9][1][6-9]{1}[0-9]{9}$/; 
 const EMAIL_REGEX_PATTERN = /^[a-zA-Z0-9]+([._+-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+.[a-zA-Z]{2,4}([.][a-zA-Z]{2,4})?$/;
-let contactArray = [ ];
+let contactArray = new Array();
 
 class Contact {
 
@@ -18,7 +18,7 @@ class Contact {
     email;
 
     constructor(firstName,lastName,address,city,state,zip,phoneNumber,email){
-        if(!NAME_REGEX_PATTERN.test(firstName)) throw 'Please enter valid firstname.'
+        if(!NAME_REGEX_PATTERN.test(firstName)) throw 'Please enter valid Firstname.'
         { 
             this.firstName = firstName;
         }
@@ -155,9 +155,37 @@ function searchByCityOrState(searchCityOrState, choice){
     console.log("Contact: ",contacts);
 }
 
+function countByCityOrState(countCityOrState, choice){
+    let contacts = new Array();
+    if(choice == 1){
+        console.log("Contacts in "+countCityOrState+" city are: ",contactArray.filter(contact => contact.city == countCityOrState).reduce(contact => contact + 1, 0));
+    }
+    if(choice == 2){
+        console.log("Contacts in "+countCityOrState+" state are: ",contactArray.filter(contact => contact.state == countCityOrState).reduce(contact => contact + 1, 0));
+    }
+}
+
+function sortContactByCity_State_Zip(inputToSort){
+    if(inputToSort == 1){
+        contactArray.sort(function(a, b) { return a.city.localeCompare(b.city)});
+        for(let i = 0; i < contactArray.length; i++)
+        console.log(contactArray[i].toString(),"\n");
+    }
+    if(inputToSort == 2){
+        contactArray.sort(function(a, b) { return a.state.localeCompare(b.state)});
+        for(let i = 0; i < contactArray.length; i++)
+        console.log(contactArray[i].toString(),"\n");
+    }
+    if(inputToSort == 3){
+        contactArray.sort(function(a, b) { return parseInt(a.zip) - parseInt(b.zip)});
+        for(let i = 0; i < contactArray.length; i++)
+        console.log(contactArray[i].toString(),"\n");
+    }
+}
+
 let choice = 0;
 do{
-    console.log("Press: \n1) Add Contact \n2) Edit Contact \n3) View Contact  \n4) Delete Contact \n5) Count Contacts \n6) Search City or State \n0)Exit:");
+    console.log("Press: \n1) Add Contact \n2) Edit Contact \n3) View Contact  \n4) Delete Contact \n5) Count Contacts \n6) Search City or State \n7) View Contact By city or state \n8) Count by city or state \n9) Sort by name \n10) Sort By City, State or Zip \n0)Exit:");
     choice = Number(prompt("Enter your choice: "));
     if(choice == 1){
         addContact();
@@ -202,5 +230,25 @@ do{
                     searchByCityOrState(state, 2);
                     break;
         }
+    }
+    if(choice == 8){
+        console.log("1) Count By City   2) Count By State");
+        let choice = Number(prompt("Enter your choice: "));
+        switch (choice){
+            case 1: let city = prompt("Enter the city name: ");
+                    countByCityOrState(city, 1);
+                    break;
+            case 2: let state = prompt("Enter the state name: ");
+                    countByCityOrState(state, 2);
+                    break;
+        }
+    }
+    if(choice == 9){
+        console.log(contactArray.sort((a,b)=>a.firstName.localeCompare(b.firstName)));
+    }
+    if(choice == 10){
+        console.log("Sort Contacts based on \t1.) City \t2.) State \t3.) Zip")
+        let inputToSort = parseInt(prompt("Enter your choice:  "))
+        sortContactByCity_State_Zip(inputToSort);
     }
 }while(choice != 0);
